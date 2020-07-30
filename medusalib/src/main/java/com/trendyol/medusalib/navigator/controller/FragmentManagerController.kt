@@ -48,14 +48,15 @@ class FragmentManagerController(private val fragmentManager: FragmentManager,
 
         when (currentTransitionAnimationType) {
             TransitionAnimationType.LEFT_TO_RIGHT -> setCustomAnimations(R.anim.empty_animation, R.anim.exit_to_left)
-            TransitionAnimationType.RIGHT_TO_LEFT -> setCustomAnimations(R.anim.empty_animation, R.anim.exit_to_right)
+//            TransitionAnimationType.RIGHT_TO_LEFT -> setCustomAnimations(R.anim.empty_animation, R.anim.exit_to_right)
+            TransitionAnimationType.RIGHT_TO_LEFT -> setCustomAnimations(R.anim.close_enter, R.anim.close_exit, R.anim.open_enter, R.anim.open_exit)
             TransitionAnimationType.BOTTOM_TO_TOP -> setCustomAnimations(R.anim.empty_animation, R.anim.exit_to_bottom)
             TransitionAnimationType.TOP_TO_BOTTOM -> setCustomAnimations(R.anim.empty_animation, R.anim.exit_to_top)
             TransitionAnimationType.FADE_IN_OUT -> setCustomAnimations(R.anim.empty_animation, R.anim.fade_out)
         }
 
         currentTransaction?.remove(getFragment(fragmentTag))
-        commitAllowingStateLoss()
+//        commitAllowingStateLoss()
     }
 
     fun removeFragments(fragmentTagList: List<String>) {
@@ -64,7 +65,7 @@ class FragmentManagerController(private val fragmentManager: FragmentManager,
         for (fragmentTag in fragmentTagList) {
             getFragment(fragmentTag)?.let { currentTransaction?.remove(it) }
         }
-        commitAllowingStateLoss()
+//        commitAllowingStateLoss()
     }
 
     fun addFragment(fragmentData: FragmentData) {
@@ -83,7 +84,8 @@ class FragmentManagerController(private val fragmentManager: FragmentManager,
             currentTransitionAnimationType = fragmentData.transitionAnimation
             when (currentTransitionAnimationType) {
                 TransitionAnimationType.LEFT_TO_RIGHT -> setCustomAnimations(R.anim.enter_from_left, R.anim.empty_animation)
-                TransitionAnimationType.RIGHT_TO_LEFT -> setCustomAnimations(R.anim.enter_from_right, R.anim.empty_animation)
+//                TransitionAnimationType.RIGHT_TO_LEFT -> setCustomAnimations(R.anim.enter_from_right, R.anim.empty_animation)
+                TransitionAnimationType.RIGHT_TO_LEFT -> setCustomAnimations(R.anim.open_enter, R.anim.open_exit, R.anim.close_enter, R.anim.close_exit)
                 TransitionAnimationType.BOTTOM_TO_TOP -> setCustomAnimations(R.anim.enter_from_bottom, R.anim.empty_animation)
                 TransitionAnimationType.TOP_TO_BOTTOM -> setCustomAnimations(R.anim.enter_from_top, R.anim.empty_animation)
                 TransitionAnimationType.FADE_IN_OUT -> setCustomAnimations(R.anim.fade_in, R.anim.empty_animation)
@@ -102,6 +104,10 @@ class FragmentManagerController(private val fragmentManager: FragmentManager,
 
     private fun setCustomAnimations(@AnimatorRes @AnimRes enter: Int, @AnimatorRes @AnimRes exit: Int) {
         currentTransaction?.setCustomAnimations(enter, exit)
+    }
+
+    private fun setCustomAnimations(@AnimatorRes @AnimRes enter: Int, @AnimatorRes @AnimRes exit: Int, @AnimatorRes @AnimRes popEnter: Int, @AnimatorRes @AnimRes popExit: Int) {
+        currentTransaction?.setCustomAnimations(enter, exit, popEnter, popExit)
     }
 
     fun isFragmentNull(fragmentTag: String): Boolean {
